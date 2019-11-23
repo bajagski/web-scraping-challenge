@@ -6,7 +6,6 @@ from splinter import Browser
 from bs4 import BeautifulSoup
 from selenium import webdriver
 
-import mission_to_mars
 
 # chromedriver
 executable_path = {'executable_path': 'chromedriver.exe'}
@@ -38,9 +37,9 @@ def mars_news():
     soup = BeautifulSoup(html, 'html.parser')
 
     news_title = soup.find("div",class_="content_title").text
-    print(news_title)
+    # print(news_title)
     news_p = soup.find("div", class_="article_teaser_body").text
-    print(news_p)   
+    # print(news_p)   
     news_data = [news_title, news_p]
     return news_data
 
@@ -55,7 +54,7 @@ def  mars_image():
     soup = BeautifulSoup(image_html, 'html.parser')
     featured_image = soup.find('img', class_ = 'thumb')['src']
     featured_image_url = "https://www.jpl.nasa.gov" + featured_image
-    print(featured_image_url)
+    # print(featured_image_url)
     return featured_image_url
 
 # Visit the Mars Weather twitter account here and scrape the latest Mars weather tweet from the page.
@@ -67,19 +66,20 @@ def mars_weather():
     weather_html = browser.html
     soup = BeautifulSoup(weather_html, 'html.parser')
     mars_weather = soup.find("p", class_= "TweetTextSize").text
-    print(mars_weather)
+    # print(mars_weather)
     return mars_weather
 
 
 # Visit the Mars Facts webpage here and use Pandas to scrape the table containing facts about the planet 
 # including Diameter, Mass, etc. 
 
-def  mars_facts():
-    mars_fact_url = "https://space-facts.com/mars/"
-    mars_table = pd.read_html(mars_fact_url)
+def mars_facts():
+    mars_facts_url = "https://space-facts.com/mars/"
+    mars_table = pd.read_html(mars_facts_ur
     df = mars_table[0]
     df.columns = ['description', 'values']
-    mars_facts = df.to_html(header =True)
+    df.head(10)
+    mars_facts = df.to_html()
     return mars_facts
 
 # Visit the USGS Astrogeology site here to obtain high resolution images for each of Mar's hemispheres.
@@ -91,7 +91,60 @@ def  mars_facts():
 # This list will contain one dictionary for each hemisphere.
 
 def mars_hemi():
-mars_hemi_url = "https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars"
-browser.visit(mars_hemi_url)
-mars_hemi_html = browser.html
-soup = BeautifulSoup(mars_hemi_html, 'html.parser')
+    mars_hemi_url = "https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars"
+    browser.visit(mars_hemi_url)
+
+    browser.click_link_by_partial_text("Cerberus")
+    time.sleep(3)
+    mars_hemi_html = browser.html
+    soup = BeautifulSoup(mars_hemi_html, 'html.parser')
+
+    cerberus_image = soup.find('a', target = "_blank")['href']
+    cerberus_title = soup.find('h2', class_ = "title").text
+
+
+    mars_hemi_url = "https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars"
+    browser.visit(mars_hemi_url)
+
+
+    browser.click_link_by_partial_text("Schiaparelli")
+    time.sleep(3)
+    mars_hemi_html = browser.html
+    soup = BeautifulSoup(mars_hemi_html, 'html.parser')
+
+    schiaparelli_image = soup.find('a', target = "_blank")['href']
+    schiaparelli_title = soup.find('h2', class_ = "title").text
+
+
+    mars_hemi_url = "https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars"
+    browser.visit(mars_hemi_url)
+
+
+    browser.click_link_by_partial_text("Syrtis")
+    time.sleep(3)
+    mars_hemi_html = browser.html
+    soup = BeautifulSoup(mars_hemi_html, 'html.parser')
+
+    syrtis_image = soup.find('a', target = "_blank")['href']
+    syrtis_title = soup.find('h2', class_ = "title").text
+
+
+    mars_hemi_url = "https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars"
+    browser.visit(mars_hemi_url)
+
+
+
+    browser.click_link_by_partial_text("Valles")
+    time.sleep(3)
+    mars_hemi_html = browser.html
+    soup = BeautifulSoup(mars_hemi_html, 'html.parser')
+
+    valles_image = soup.find('a', target = "_blank")['href']
+    valles_title = soup.find('h2', class_ = "title").text
+
+
+    mars_hemi = [{"image_url" : cerberus_image, "title": cerberus_title}, 
+                {"image_url": schiaparelli_image, "title": schiaparelli_title},
+                {"image_url": syrtis_image, "title": syrtis_title},
+                {"image_url": valles_image, "title": valles_title}]
+    return mars_hemi
