@@ -17,9 +17,8 @@ browser =  Browser('chrome', **executable_path, headless=True)
 def scrape():
     scraped_data = {}
     
-    scraped_data["mars_news"] = news_data[0]
-    scraped_data["mars_news"] = news_data[1]
-    scraped_data["mars_image"] = featured_image_url()
+    scraped_data["mars_news"] = mars_news()
+    scraped_data["mars_image"] = mars_image()
     scraped_data["mars_weather"] = mars_weather()
     scraped_data["mars_facts"] = mars_facts()
     scraped_data["mars_hemisphere"] = mars_hemi()
@@ -75,7 +74,7 @@ def mars_weather():
 
 def mars_facts():
     mars_facts_url = "https://space-facts.com/mars/"
-    mars_table = pd.read_html(mars_facts_ur
+    mars_table = pd.read_html(mars_facts_url)
     df = mars_table[0]
     df.columns = ['description', 'values']
     df.head(10)
